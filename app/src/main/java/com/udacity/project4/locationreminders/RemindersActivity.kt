@@ -23,12 +23,12 @@ class RemindersActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                (nav_host_fragment as NavHostFragment).navController.popBackStack()
-                return true
-            }
-        }
+//        when (item.itemId) {
+//            android.R.id.home -> {
+//                (nav_host_fragment as NavHostFragment).navController.popBackStack()
+//                return true
+//            }
+//        }
         return super.onOptionsItemSelected(item)
     }
 }
