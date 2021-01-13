@@ -62,11 +62,4 @@ class AuthenticationActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-
-        finish()
-    }
-
 }

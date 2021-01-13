@@ -80,7 +80,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected(latLng: LatLng) {
-        //        TODO: add the geofence
         val fromLocation = Geocoder(activity).getFromLocation(latLng.latitude, latLng.longitude, 2)
         _viewModel.reminderSelectedLocationStr.postValue(fromLocation[0].locality)
         _viewModel.latitude.postValue(latLng.latitude)
@@ -275,7 +274,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     companion object {
-        private const val DEFAULT_ZOOM = 16
+        private const val DEFAULT_ZOOM = 15
 
         private const val REQUEST_CODE_LOCATION = 125
         private const val REQUEST_TURN_DEVICE_LOCATION_ON = 126
