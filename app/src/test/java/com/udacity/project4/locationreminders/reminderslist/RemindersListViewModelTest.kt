@@ -5,8 +5,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
+import com.udacity.project4.R
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
+import com.udacity.project4.locationreminders.util.MainCoroutineRule
 import com.udacity.project4.locationreminders.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -14,6 +16,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.robolectric.annotation.Config
 
 //to get rid of this error: java.lang.UnsupportedOperationException: Failed to create a Robolectric sandbox: Android SDK 30 requires Java 9 (have Java 8)
@@ -30,8 +33,12 @@ class RemindersListViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+
     @Before
     fun setupViewModel(){
+        stopKoin()
 
         dataSource = FakeDataSource()
 
@@ -47,5 +54,22 @@ class RemindersListViewModelTest {
         remindersListViewModel.loadReminders()
 
         assertThat(remindersListViewModel.remindersList.getOrAwaitValue()).isNotEmpty()
+    }
+
+    @Test
+    fun checkLoadingStatus() = mainCoroutineRule.runBlockingTest {
+        mainCoroutineRule.pauseDispatcher()
+        remindersListViewModel.loadReminders()
+        assertThat(remindersListViewModel.showLoading.getOrAwaitValue()).isTrue()
+
+        mainCoroutineRule.resumeDispatcher()
+        assertThat(remindersListViewModel.showLoading.getOrAwaitValue()).isFalse()
+    }
+
+    @Test
+    fun getReminders_shouldReturnError() = mainCoroutineRule.runBlockingTest {
+        dataSource.setReturnError(true)
+        remindersListViewModel.loadReminders()
+        assertThat(remindersListViewModel.showSnackBar.getOrAwaitValue()).isEqualTo("Error getting Reminders")
     }
 }
