@@ -2,8 +2,10 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -21,10 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -66,8 +65,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
-
-//        TODO: add style to the map
 
         // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient =
@@ -112,6 +109,25 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
+    private fun setMapStyle(map: GoogleMap) {
+        try {
+            // Customize the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            val success = map.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireActivity(),
+                    R.raw.map_style
+                )
+            )
+
+            if (!success) {
+                Timber.e( "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Timber.e( "Can't find style. Error: ")
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -138,6 +154,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         map = googleMap
 
         updateLocationUI()
+        setMapStyle(map)
+
         map?.setOnMapClickListener { latLng ->
             // Get the current location of the device and set the position of the map.
             selectedMarker?.remove()
@@ -150,6 +168,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun updateLocationUI() {
         if (map == null) {
             return
@@ -232,6 +251,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("MissingPermission")
     private fun getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
