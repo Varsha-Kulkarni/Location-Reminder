@@ -30,7 +30,7 @@
             android:layout_marginStart="@dimen/margin_normal"
             android:layout_marginLeft="@dimen/margin_normal"
             android:text="@{String.format(@string/title, reminderDataItem.title)}"
-            style="@style/TitleStyle"
+            style="@style/TextStyle"
             tools:text = "Title"/>
 
         <TextView

@@ -58,7 +58,7 @@ class SaveReminderFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.selectLocation.setOnClickListener {
-            //            Navigate to another fragment to get the user location
+            //Navigate to another fragment to get the user location
             _viewModel.navigationCommand.value =
                 NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
         }
@@ -72,8 +72,6 @@ class SaveReminderFragment : BaseFragment() {
 
             val reminderData = ReminderDataItem(title, description, location, latitude, longitude)
 
-//            TODO: use the user entered reminder details to:
-//             1) add a geofencing request
             if(_viewModel.validateAndSaveReminder(reminderData)){
                 addGeofence(reminderData)
             }

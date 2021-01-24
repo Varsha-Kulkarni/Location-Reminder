@@ -43,8 +43,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private var lastKnownLocation: Location? = null
     private var selectedMarker: Marker? = null
-    private var cameraPosition: CameraPosition? = null
-
 
     // The entry point to the Fused Location Provider.
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -156,30 +154,27 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         updateLocationUI()
         setMapStyle(map)
 
-        map?.setOnMapClickListener { latLng ->
+        map.setOnMapClickListener { latLng ->
             // Get the current location of the device and set the position of the map.
             selectedMarker?.remove()
             selectedMarker?.position = latLng
-            map?.addMarker(MarkerOptions().position(latLng)).also {
+            map.addMarker(MarkerOptions().position(latLng)).also {
                 selectedMarker = it
             }
-            map?.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+            map.animateCamera(CameraUpdateFactory.newLatLng(latLng))
             onLocationSelected(latLng)
         }
     }
 
     @SuppressLint("MissingPermission")
     private fun updateLocationUI() {
-        if (map == null) {
-            return
-        }
         try {
             if (locationPermissionGranted) {
-                map?.isMyLocationEnabled = true
-                map?.uiSettings?.isMyLocationButtonEnabled = true
+                map.isMyLocationEnabled = true
+                map.uiSettings?.isMyLocationButtonEnabled = true
             } else {
-                map?.isMyLocationEnabled = false
-                map?.uiSettings?.isMyLocationButtonEnabled = false
+                map.isMyLocationEnabled = false
+                map.uiSettings?.isMyLocationButtonEnabled = false
                 lastKnownLocation = null
                 checkAndRequestLocationPermissions()
             }
@@ -269,7 +264,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                         if (lastKnownLocation != null) {
                             Timber.d("last  known location $lastKnownLocation")
 
-                            map?.moveCamera(
+                            map.moveCamera(
                                 CameraUpdateFactory.newLatLngZoom(
                                     LatLng(
                                         lastKnownLocation!!.latitude,
@@ -278,12 +273,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                                 )
                             )
                         } else {
-                            Timber.e("Exception: %s", task.exception)
-                            map?.moveCamera(
+                            Timber.e( "Exception: %s", task.exception)
+                            map.moveCamera(
                                 CameraUpdateFactory
                                     .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat())
                             )
-                            map?.uiSettings?.isMyLocationButtonEnabled = false
+                            map.uiSettings?.isMyLocationButtonEnabled = false
                         }
                     }
                 }

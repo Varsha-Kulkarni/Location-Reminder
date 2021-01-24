@@ -44,7 +44,7 @@ class RemindersDaoTest {
     @Test
     fun saveReminder() = runBlockingTest {
         val reminder = ReminderDTO("title", "description","location",
-            12.03, 13.04)
+            -33.8523341, 151.2106085)
         dao.saveReminder(reminder)
 
         assertThat(dao.getReminders()).contains(reminder)

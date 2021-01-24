@@ -7,10 +7,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-
-    <style name="TitleStyle" parent="TextAppearance.AppCompat.Title">
-        <item name="android:textSize">@dimen/text_size_medium</item>
-    </style>
     <style name="TextStyle" parent="TextAppearance.AppCompat.Title">
         <item name="android:textSize">@dimen/text_size_small</item>
     </style>
