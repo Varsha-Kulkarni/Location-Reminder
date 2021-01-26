@@ -80,6 +80,7 @@ class ReminderListFragment : BaseFragment() {
                 AuthUI.getInstance().signOut(requireContext()).addOnCompleteListener {
                     if(it.isSuccessful){
                         startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
+                        requireActivity().finish()
                     }
                 }
             }
