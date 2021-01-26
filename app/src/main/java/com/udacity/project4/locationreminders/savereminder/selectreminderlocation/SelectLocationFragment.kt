@@ -11,7 +11,6 @@ import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.core.content.PermissionChecker
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ResolvableApiException
@@ -143,6 +142,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     locationPermissionGranted = true
                     Timber.d("Permission Granted")
                     checkDeviceLocationSettings(true)
+                }
+                else{
+                    _viewModel.showSnackBar.postValue(getString(R.string.permission_denied_explanation))
                 }
             }
         }
