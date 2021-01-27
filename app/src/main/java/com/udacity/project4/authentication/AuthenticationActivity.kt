@@ -6,12 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.databinding.ActivityAuthenticationBinding
 import com.udacity.project4.locationreminders.RemindersActivity
@@ -29,13 +25,12 @@ class AuthenticationActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityAuthenticationBinding
 
-    private val auth = FirebaseAuth.getInstance()
     private val viewModel: AuthenticationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.authenticationState.observe(this, Observer { authenticationState ->
+        viewModel.authenticationState.observe(this, { authenticationState ->
 
             when(authenticationState){
                 AuthenticationState.AUTHENTICATED -> {
@@ -76,14 +71,8 @@ class AuthenticationActivity : AppCompatActivity() {
                 startActivity(Intent(this, RemindersActivity::class.java))
             }
             else {
-                if (response == null) {
-                    Timber.i("Back button pressed")
-                    return
-                }
-                if (response.error?.errorCode == ErrorCodes.NO_NETWORK) {
-                    Snackbar.make(binding.mainLayout,"Network not available", Snackbar.LENGTH_LONG)
-                }
-
+                Timber.i("Sign in unsuccessful ${response?.error?.errorCode}")
+                return
             }
         }
     }
